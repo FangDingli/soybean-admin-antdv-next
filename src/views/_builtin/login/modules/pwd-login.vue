@@ -3,7 +3,7 @@ import { computed, reactive } from 'vue';
 import { loginModuleRecord } from '@/constants/app';
 import { useAuthStore } from '@/store/modules/auth';
 import { useRouterPush } from '@/hooks/common/router';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useFormRules, useAntdvForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -12,7 +12,7 @@ defineOptions({
 
 const authStore = useAuthStore();
 const { toggleLoginModule } = useRouterPush();
-const { formRef, validate } = useNaiveForm();
+const { formRef, validate } = useAntdvForm();
 
 interface FormModel {
   userName: string;
@@ -75,44 +75,39 @@ async function handleAccountLogin(account: Account) {
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
-    <NFormItem path="userName">
-      <NInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
-    </NFormItem>
-    <NFormItem path="password">
-      <NInput
-        v-model:value="model.password"
-        type="password"
-        show-password-on="click"
-        :placeholder="$t('page.login.common.passwordPlaceholder')"
-      />
-    </NFormItem>
-    <NSpace vertical :size="24">
+  <AForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
+    <AFormItem name="userName">
+      <AInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
+    </AFormItem>
+    <AFormItem name="password">
+      <AInputPassword v-model:value="model.password" :placeholder="$t('page.login.common.passwordPlaceholder')" />
+    </AFormItem>
+    <ASpace direction="vertical" :size="24">
       <div class="flex-y-center justify-between">
-        <NCheckbox>{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
-        <NButton quaternary @click="toggleLoginModule('reset-pwd')">
+        <ACheckbox>{{ $t('page.login.pwdLogin.rememberMe') }}</ACheckbox>
+        <AButton type="text" @click="toggleLoginModule('reset-pwd')">
           {{ $t('page.login.pwdLogin.forgetPassword') }}
-        </NButton>
+        </AButton>
       </div>
-      <NButton type="primary" size="large" round block :loading="authStore.loginLoading" @click="handleSubmit">
+      <AButton type="primary" size="large" round block :loading="authStore.loginLoading" @click="handleSubmit">
         {{ $t('common.confirm') }}
-      </NButton>
+      </AButton>
       <div class="flex-y-center justify-between gap-12px">
-        <NButton class="flex-1" block @click="toggleLoginModule('code-login')">
+        <AButton class="flex-1" block @click="toggleLoginModule('code-login')">
           {{ $t(loginModuleRecord['code-login']) }}
-        </NButton>
-        <NButton class="flex-1" block @click="toggleLoginModule('register')">
+        </AButton>
+        <AButton class="flex-1" block @click="toggleLoginModule('register')">
           {{ $t(loginModuleRecord.register) }}
-        </NButton>
+        </AButton>
       </div>
-      <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>
+      <ADivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</ADivider>
       <div class="flex-center gap-12px">
-        <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
+        <AButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
           {{ item.label }}
-        </NButton>
+        </AButton>
       </div>
-    </NSpace>
-  </NForm>
+    </ASpace>
+  </AForm>
 </template>
 
 <style scoped></style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useFormRules, useAntdvForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -9,7 +9,7 @@ defineOptions({
 });
 
 const { toggleLoginModule } = useRouterPush();
-const { formRef, validate } = useNaiveForm();
+const { formRef, validate } = useAntdvForm();
 
 interface FormModel {
   phone: string;
@@ -45,38 +45,31 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
-    <NFormItem path="phone">
-      <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
-    </NFormItem>
-    <NFormItem path="code">
-      <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
-    </NFormItem>
-    <NFormItem path="password">
-      <NInput
-        v-model:value="model.password"
-        type="password"
-        show-password-on="click"
-        :placeholder="$t('page.login.common.passwordPlaceholder')"
-      />
-    </NFormItem>
-    <NFormItem path="confirmPassword">
-      <NInput
+  <AForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
+    <AFormItem name="phone">
+      <AInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
+    </AFormItem>
+    <AFormItem name="code">
+      <AInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
+    </AFormItem>
+    <AFormItem name="password">
+      <AInputPassword v-model:value="model.password" :placeholder="$t('page.login.common.passwordPlaceholder')" />
+    </AFormItem>
+    <AFormItem name="confirmPassword">
+      <AInputPassword
         v-model:value="model.confirmPassword"
-        type="password"
-        show-password-on="click"
         :placeholder="$t('page.login.common.confirmPasswordPlaceholder')"
       />
-    </NFormItem>
-    <NSpace vertical :size="18" class="w-full">
-      <NButton type="primary" size="large" round block @click="handleSubmit">
+    </AFormItem>
+    <ASpace direction="vertical" :size="18" class="w-full">
+      <AButton type="primary" size="large" round block @click="handleSubmit">
         {{ $t('common.confirm') }}
-      </NButton>
-      <NButton size="large" round block @click="toggleLoginModule('pwd-login')">
+      </AButton>
+      <AButton size="large" round block @click="toggleLoginModule('pwd-login')">
         {{ $t('page.login.common.back') }}
-      </NButton>
-    </NSpace>
-  </NForm>
+      </AButton>
+    </ASpace>
+  </AForm>
 </template>
 
 <style scoped></style>

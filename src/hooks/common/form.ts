@@ -1,6 +1,6 @@
 import { ref, toValue } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
-import type { FormInst } from 'naive-ui';
+import type { FormInstance } from 'antdv-next';
 import { REG_CODE_SIX, REG_EMAIL, REG_PHONE, REG_PWD, REG_USER_NAME } from '@/constants/reg';
 import { $t } from '@/locales';
 
@@ -56,14 +56,15 @@ export function useFormRules() {
     const confirmPwdRule: App.Global.FormRule[] = [
       { required: true, message: $t('form.confirmPwd.required') },
       {
-        asyncValidator: (rule, value) => {
+        // naive's `asyncValidator` doesn't exist in antd; use `validator` returning a Promise
+        validator: (rule, value) => {
           if (value.trim() !== '' && value !== toValue(pwd)) {
             return Promise.reject(rule.message);
           }
           return Promise.resolve();
         },
         message: $t('form.confirmPwd.invalid'),
-        trigger: 'input'
+        trigger: 'change'
       }
     ];
     return confirmPwdRule;
@@ -78,15 +79,15 @@ export function useFormRules() {
   };
 }
 
-export function useNaiveForm() {
-  const formRef = ref<FormInst | null>(null);
+export function useAntdvForm() {
+  const formRef = ref<FormInstance | null>(null);
 
   async function validate() {
     await formRef.value?.validate();
   }
 
   async function restoreValidation() {
-    formRef.value?.restoreValidation();
+    formRef.value?.clearValidate();
   }
 
   return {

@@ -14,33 +14,35 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
 </script>
 
 <template>
-  <NSpace vertical :size="16">
-    <NAlert :title="$t('common.tip')" type="warning">
+  <ASpace direction="vertical" :size="16" class="w-full">
+    <AAlert type="warning" show-icon>
+      <template #message>{{ $t('common.tip') }}</template>
       {{ $t('page.home.branchDesc') }}
-    </NAlert>
+    </AAlert>
     <HeaderBanner />
     <CardData />
-    <NGrid :x-gap="gap" :y-gap="16" responsive="screen" item-responsive>
-      <NGi span="24 s:24 m:14">
-        <NCard :bordered="false" class="card-wrapper">
+    <!-- naive responsive spans (span="24 s:24 m:14") map to antd breakpoint props -->
+    <ARow :gutter="[gap, 16]">
+      <ACol :xs="24" :md="14">
+        <ACard :bordered="false" class="card-wrapper">
           <LineChart />
-        </NCard>
-      </NGi>
-      <NGi span="24 s:24 m:10">
-        <NCard :bordered="false" class="card-wrapper">
+        </ACard>
+      </ACol>
+      <ACol :xs="24" :md="10">
+        <ACard :bordered="false" class="card-wrapper">
           <PieChart />
-        </NCard>
-      </NGi>
-    </NGrid>
-    <NGrid :x-gap="gap" :y-gap="16" responsive="screen" item-responsive>
-      <NGi span="24 s:24 m:14">
+        </ACard>
+      </ACol>
+    </ARow>
+    <ARow :gutter="[gap, 16]">
+      <ACol :xs="24" :md="14">
         <ProjectNews />
-      </NGi>
-      <NGi span="24 s:24 m:10">
+      </ACol>
+      <ACol :xs="24" :md="10">
         <CreativityBanner />
-      </NGi>
-    </NGrid>
-  </NSpace>
+      </ACol>
+    </ARow>
+  </ASpace>
 </template>
 
 <style scoped></style>

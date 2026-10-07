@@ -39,9 +39,9 @@ const statisticData = computed<StatisticData[]>(() => [
 </script>
 
 <template>
-  <NCard :bordered="false" class="card-wrapper">
-    <NGrid :x-gap="gap" :y-gap="16" responsive="screen" item-responsive>
-      <NGi span="24 s:24 m:18">
+  <ACard :bordered="false" class="card-wrapper">
+    <ARow :gutter="[gap, 16]">
+      <ACol :xs="24" :md="18">
         <div class="flex-y-center">
           <div class="size-72px shrink-0 overflow-hidden rd-1/2">
             <img src="@/assets/imgs/soybean.jpg" class="size-full" />
@@ -53,14 +53,20 @@ const statisticData = computed<StatisticData[]>(() => [
             <p class="text-#999 leading-30px">{{ $t('page.home.weatherDesc') }}</p>
           </div>
         </div>
-      </NGi>
-      <NGi span="24 s:24 m:6">
-        <NSpace :size="24" justify="end">
-          <NStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item" />
-        </NSpace>
-      </NGi>
-    </NGrid>
-  </NCard>
+      </ACol>
+      <ACol :xs="24" :md="6">
+        <ASpace :size="24" justify="end">
+          <AStatistic
+            v-for="item in statisticData"
+            :key="item.id"
+            class="whitespace-nowrap"
+            :title="item.label"
+            :value="item.value"
+          />
+        </ASpace>
+      </ACol>
+    </ARow>
+  </ACard>
 </template>
 
 <style scoped></style>

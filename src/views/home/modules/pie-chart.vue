@@ -101,9 +101,9 @@ init();
 </script>
 
 <template>
-  <NCard :bordered="false" class="card-wrapper">
+  <ACard :bordered="false" class="card-wrapper">
     <div ref="domRef" class="h-360px overflow-hidden"></div>
-  </NCard>
+  </ACard>
 </template>
 
 <style scoped></style>

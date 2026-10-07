@@ -279,8 +279,7 @@ declare namespace App {
     };
 
     /** Form rule */
-    // TODO(WP7): switch to `import('antdv-next').RuleObject` together with hooks/common/form.ts and the login forms
-    type FormRule = import('naive-ui').FormItemRule;
+    type FormRule = import('antdv-next').RuleObject;
 
     /** The global dropdown key */
     type DropdownKey = 'closeCurrent' | 'closeOther' | 'closeLeft' | 'closeRight' | 'closeAll' | 'pin' | 'unpin';

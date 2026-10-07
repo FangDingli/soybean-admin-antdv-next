@@ -22,19 +22,25 @@ const newses = computed<NewsItem[]>(() => [
 </script>
 
 <template>
-  <NCard :title="$t('page.home.projectNews.title')" :bordered="false" size="small" segmented class="card-wrapper">
-    <template #header-extra>
+  <ACard :title="$t('page.home.projectNews.title')" :bordered="false" size="small" class="card-wrapper">
+    <template #extra>
       <a class="text-primary" href="javascript:;">{{ $t('page.home.projectNews.moreNews') }}</a>
     </template>
-    <NList>
-      <NListItem v-for="item in newses" :key="item.id">
-        <template #prefix>
-          <SoybeanAvatar class="size-48px!" />
-        </template>
-        <NThing :title="item.content" :description="item.time" />
-      </NListItem>
-    </NList>
-  </NCard>
+    <!--
+ naive NList/NThing have no direct antdv equivalent (antdv's Listy is a virtual scroll list),
+         so the news rows are rendered with plain markup 
+-->
+    <div v-for="(item, index) in newses" :key="item.id">
+      <ADivider v-if="index > 0" class="!my-8px" />
+      <div class="flex-y-center gap-12px">
+        <SoybeanAvatar class="size-48px!" />
+        <div>
+          <p class="m-0 font-medium">{{ item.content }}</p>
+          <p class="m-0 text-12px text-#999">{{ item.time }}</p>
+        </div>
+      </div>
+    </div>
+  </ACard>
 </template>
 
 <style scoped></style>

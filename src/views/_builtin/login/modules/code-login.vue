@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useFormRules, useAntdvForm } from '@/hooks/common/form';
 import { useCaptcha } from '@/hooks/business/captcha';
 import { $t } from '@/locales';
 
@@ -10,7 +10,7 @@ defineOptions({
 });
 
 const { toggleLoginModule } = useRouterPush();
-const { formRef, validate } = useNaiveForm();
+const { formRef, validate } = useAntdvForm();
 const { label, isCounting, loading, getCaptcha } = useCaptcha();
 
 interface FormModel {
@@ -40,27 +40,27 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
-    <NFormItem path="phone">
-      <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
-    </NFormItem>
-    <NFormItem path="code">
+  <AForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
+    <AFormItem name="phone">
+      <AInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
+    </AFormItem>
+    <AFormItem name="code">
       <div class="w-full flex-y-center gap-16px">
-        <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
-        <NButton size="large" :disabled="isCounting" :loading="loading" @click="getCaptcha(model.phone)">
+        <AInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
+        <AButton size="large" :disabled="isCounting" :loading="loading" @click="getCaptcha(model.phone)">
           {{ label }}
-        </NButton>
+        </AButton>
       </div>
-    </NFormItem>
-    <NSpace vertical :size="18" class="w-full">
-      <NButton type="primary" size="large" round block @click="handleSubmit">
+    </AFormItem>
+    <ASpace direction="vertical" :size="18" class="w-full">
+      <AButton type="primary" size="large" round block @click="handleSubmit">
         {{ $t('common.confirm') }}
-      </NButton>
-      <NButton size="large" round block @click="toggleLoginModule('pwd-login')">
+      </AButton>
+      <AButton size="large" round block @click="toggleLoginModule('pwd-login')">
         {{ $t('page.login.common.back') }}
-      </NButton>
-    </NSpace>
-  </NForm>
+      </AButton>
+    </ASpace>
+  </AForm>
 </template>
 
 <style scoped></style>

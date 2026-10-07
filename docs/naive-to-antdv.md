@@ -165,3 +165,21 @@
 - **Dropdown 的 `trigger` 必须用 `:` 绑定数组**（`trigger="['click']"` 字符串会类型报错）。
 - **面包屑**：`NBreadcrumb/NBreadcrumbItem→ABreadcrumb/ABreadcrumbItem`；下拉用 WP5 的
   `getAntdMenuItems` 适配器复用。
+
+### WP7 视图（登录 + home + 异常页）
+
+- **表单**：`FormInst→FormInstance`（`useNaiveForm→useAntdvForm`，`restoreValidation()→clearValidate()`）；
+  naive `NFormItem path` → antd `AFormItem name`（rules 绑定靠 name）；
+  naive `type="password" + show-password-on="click"` → `AInputPassword`（自带可见性切换）。
+- **FormRule 类型**：`App.Global.FormRule` 切到 antd `RuleObject`（`Rule` 联合类型会破坏
+  asyncValidator 回调的上下文推断）；**naive 的 `asyncValidator` 在 antd 中不存在**，改用
+  `validator` 返回 Promise；naive 的 `trigger: 'input'` → `'change'`（antd 无 'input' 触发器）。
+- **栅格**：naive `NGrid/NGi`（`span="24 s:24 m:14"`、`cols="s:1 m:2 l:4"` 响应式字符串）
+  → `ARow :gutter="[x,y]"` + `ACol :xs/:sm/:md/:xl` 数字断言 props；断点值近似映射（naive m=1024≈antd md/lg）。
+- **NList/NListItem/NThing 无直接对应**：antdv 的 `Listy` 是虚拟滚动列表（itemRender），语义不同——
+  demo 的项目动态改用手写行 + ADivider 分隔。NCard 的 `#header-extra` → `#extra`。
+- **NAlert**：`:title` + 默认内容 → `#message` 插槽 + 默认插槽（description），加 `show-icon`。
+- **NStatistic v-bind{label,value}** → `AStatistic :title :value`。
+- **浏览器实测（apifox mock 在线）**：登录页全链路 ✓、登录成功 notification ✓、
+  水平+侧边 AMenu 选中高亮 ✓、头像下拉 ✓、主题抽屉（ASegmented/ASwitch/AColorPicker/ACheckbox）✓、
+  home 各卡片与图表 ✓。

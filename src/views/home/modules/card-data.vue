@@ -81,7 +81,7 @@ function getGradientColor(color: CardData['color']) {
 </script>
 
 <template>
-  <NCard :bordered="false" size="small" class="card-wrapper">
+  <ACard :bordered="false" size="small" class="card-wrapper">
     <!-- define component start: GradientBg -->
     <DefineGradientBg v-slot="{ $slots, gradientColor }">
       <div
@@ -93,8 +93,9 @@ function getGradientColor(color: CardData['color']) {
     </DefineGradientBg>
     <!-- define component end: GradientBg -->
 
-    <NGrid cols="s:1 m:2 l:4" responsive="screen" :x-gap="16" :y-gap="16">
-      <NGi v-for="item in cardData" :key="item.key">
+    <!-- naive cols="s:1 m:2 l:4" maps to antd breakpoint spans -->
+    <ARow :gutter="[16, 16]">
+      <ACol v-for="item in cardData" :key="item.key" :xs="24" :sm="12" :xl="6">
         <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
           <h3 class="text-16px">{{ item.title }}</h3>
           <div class="flex justify-between pt-12px">
@@ -107,9 +108,9 @@ function getGradientColor(color: CardData['color']) {
             />
           </div>
         </GradientBg>
-      </NGi>
-    </NGrid>
-  </NCard>
+      </ACol>
+    </ARow>
+  </ACard>
 </template>
 
 <style scoped></style>
