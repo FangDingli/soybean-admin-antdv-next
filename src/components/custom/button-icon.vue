@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PopoverPlacement } from 'naive-ui';
+import type { TooltipPlacement } from 'antdv-next';
 import { twMerge } from 'tailwind-merge';
 
 defineOptions({
@@ -15,7 +15,7 @@ interface Props {
   /** Tooltip content */
   tooltipContent?: string;
   /** Tooltip placement */
-  tooltipPlacement?: PopoverPlacement;
+  tooltipPlacement?: TooltipPlacement;
   zIndex?: number;
 }
 
@@ -31,18 +31,17 @@ const DEFAULT_CLASS = 'h-[36px] text-icon';
 </script>
 
 <template>
-  <NTooltip :placement="tooltipPlacement" :z-index="zIndex" :disabled="!tooltipContent">
-    <template #trigger>
-      <NButton quaternary :class="twMerge(DEFAULT_CLASS, props.class)" v-bind="$attrs">
-        <div class="flex-center gap-8px">
-          <slot>
-            <SvgIcon :icon="icon" />
-          </slot>
-        </div>
-      </NButton>
-    </template>
-    {{ tooltipContent }}
-  </NTooltip>
+  <!-- antd Tooltip hides itself when `title` is empty, no need for naive's `disabled` prop -->
+  <ATooltip :placement="tooltipPlacement" :z-index="zIndex">
+    <template #title>{{ tooltipContent }}</template>
+    <AButton type="text" :class="twMerge(DEFAULT_CLASS, props.class)" v-bind="$attrs">
+      <div class="flex-center gap-8px">
+        <slot>
+          <SvgIcon :icon="icon" />
+        </slot>
+      </div>
+    </AButton>
+  </ATooltip>
 </template>
 
 <style scoped></style>

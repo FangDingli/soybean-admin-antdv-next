@@ -89,3 +89,16 @@
   如需组件级定制走 ConfigProvider `theme.components`）。
 - **暂时保留**：`typings/naive-ui.d.ts`（NaiveUI 表格类型命名空间）与 `app.d.ts` 的 `FormRule`（naive FormItemRule）
   留到 WP4 / WP7 与其消费方一起改，避免中间状态 typecheck 变红。
+
+### WP3 通用组件
+
+- **Placement 命名差异（重要）**：naive 用 `bottom-start` 这类 CSS-logical 命名，antdv 用 `bottomLeft`。
+  antdv 的 `TooltipPlacement` 类型不收 `*-start`，相关字面量已随迁移改名
+  （menu-toggler / pin-toggler 的 `bottom-start` → `bottomLeft`）。
+  统一类型别名：`PopoverPlacement`（naive）→ `TooltipPlacement`（antdv-next 主入口导出）。
+- **Tooltip**：naive 的 `#trigger` 插槽 → antdv 默认插槽；naive 默认插槽（内容）→ antdv `#title` 插槽；
+  naive 的 `:disabled` 无对应——antdv 的 Tooltip 在 `title` 为空时自动不显示，直接删 prop。
+- **Dropdown**：走 `menu` prop（MenuProps + onClick）而非 options；`trigger` 是数组类型且默认就是
+  `['hover']`，`trigger="hover"` 字符串写法类型报错；选中用 `menu.selectable + menu.selectedKeys`；
+  点选事件用组件的 `menu-click` 事件。naive 逐项 `props.class`（mb-1 间距 hack）antdv 菜单项不支持，删除。
+- **Button**：naive `quaternary` → antdv `type="text"`（或 `variant="text"`）；naive `size="tiny"` → `size="small"`。

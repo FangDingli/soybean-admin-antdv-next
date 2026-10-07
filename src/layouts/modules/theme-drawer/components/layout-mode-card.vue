@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PopoverPlacement } from 'naive-ui';
+import type { TooltipPlacement } from 'antdv-next';
 import { themeLayoutModeRecord } from '@/constants/app';
 import { $t } from '@/locales';
 
@@ -26,7 +26,7 @@ const emit = defineEmits<Emits>();
 type LayoutConfig = Record<
   UnionKey.ThemeLayoutMode,
   {
-    placement: PopoverPlacement;
+    placement: TooltipPlacement;
     menuClass: string;
     mainClass: string;
   }

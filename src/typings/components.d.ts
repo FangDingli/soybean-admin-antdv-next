@@ -12,8 +12,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AButton: typeof import('antdv-next')['Button']
     AConfigProvider: typeof import('antdv-next')['ConfigProvider']
+    ADropdown: typeof import('antdv-next')['Dropdown']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+    ATooltip: typeof import('antdv-next')['Tooltip']
     AWatermark: typeof import('antdv-next')['Watermark']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
@@ -91,8 +94,11 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AButton: typeof import('antdv-next')['Button']
   const AConfigProvider: typeof import('antdv-next')['ConfigProvider']
+  const ADropdown: typeof import('antdv-next')['Dropdown']
   const AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+  const ATooltip: typeof import('antdv-next')['Tooltip']
   const AWatermark: typeof import('antdv-next')['Watermark']
   const BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
   const ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']

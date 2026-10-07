@@ -43,7 +43,7 @@ const icon = computed(() => {
   <ButtonIcon
     :key="String(collapsed)"
     :tooltip-content="collapsed ? $t('icon.expand') : $t('icon.collapse')"
-    tooltip-placement="bottom-start"
+    tooltip-placement="bottomLeft"
     :z-index="zIndex"
   >
     <SvgIcon :icon="icon" />

@@ -31,31 +31,29 @@ const tooltipContent = computed(() => {
   return $t('icon.lang');
 });
 
-/** Add bottom margin to all options except the last one for proper visual separation */
-const dropdownOptions = computed(() => {
-  const lastIndex = props.langOptions.length - 1;
-
-  return props.langOptions.map((option, index) => ({
-    ...option,
-    props: {
-      class: index < lastIndex ? 'mb-1' : undefined
-    }
-  }));
-});
+const menuProps = computed(() => ({
+  items: props.langOptions,
+  selectable: true,
+  selectedKeys: [props.lang]
+}));
 
 function changeLang(lang: App.I18n.LangType) {
   emit('changeLang', lang);
 }
+
+function handleMenuClick(info: { key: string }) {
+  changeLang(info.key as App.I18n.LangType);
+}
 </script>
 
 <template>
-  <NDropdown :value="lang" :options="dropdownOptions" trigger="hover" @select="changeLang">
+  <ADropdown :menu="menuProps" @menu-click="handleMenuClick">
     <div>
       <ButtonIcon :tooltip-content="tooltipContent" tooltip-placement="left">
         <SvgIcon icon="heroicons:language" />
       </ButtonIcon>
     </div>
-  </NDropdown>
+  </ADropdown>
 </template>
 
 <style scoped></style>

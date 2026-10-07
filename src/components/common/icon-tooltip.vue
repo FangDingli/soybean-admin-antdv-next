@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue';
-import type { PopoverPlacement } from 'naive-ui';
+import type { TooltipPlacement } from 'antdv-next';
 
 defineOptions({ name: 'IconTooltip' });
 
@@ -8,7 +8,7 @@ interface Props {
   icon?: string;
   localIcon?: string;
   desc?: string;
-  placement?: PopoverPlacement;
+  placement?: TooltipPlacement;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,16 +27,16 @@ if (!hasCustomTrigger.value && !props.icon && !props.localIcon) {
 </script>
 
 <template>
-  <NTooltip :placement="placement">
-    <template #trigger>
-      <slot name="trigger">
-        <div class="cursor-pointer">
-          <SvgIcon :icon="icon" :local-icon="localIcon" />
-        </div>
+  <ATooltip :placement="placement">
+    <template #title>
+      <slot>
+        <span>{{ desc }}</span>
       </slot>
     </template>
-    <slot>
-      <span>{{ desc }}</span>
+    <slot name="trigger">
+      <div class="cursor-pointer">
+        <SvgIcon :icon="icon" :local-icon="localIcon" />
+      </div>
     </slot>
-  </NTooltip>
+  </ATooltip>
 </template>
