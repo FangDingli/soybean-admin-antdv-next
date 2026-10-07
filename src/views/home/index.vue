@@ -17,7 +17,7 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
   <ASpace direction="vertical" :size="16" class="w-full">
     <AAlert type="warning" show-icon>
       <template #message>{{ $t('common.tip') }}</template>
-      {{ $t('page.home.branchDesc') }}
+      <template #description>{{ $t('page.home.branchDesc') }}</template>
     </AAlert>
     <HeaderBanner />
     <CardData />

@@ -52,14 +52,14 @@ async function handleSubmit() {
         </AButton>
       </div>
     </AFormItem>
-    <ASpace direction="vertical" :size="18" class="w-full">
+    <div class="flex flex-col gap-18px">
       <AButton type="primary" size="large" round block @click="handleSubmit">
         {{ $t('common.confirm') }}
       </AButton>
       <AButton size="large" round block @click="toggleLoginModule('pwd-login')">
         {{ $t('page.login.common.back') }}
       </AButton>
-    </ASpace>
+    </div>
   </AForm>
 </template>
 

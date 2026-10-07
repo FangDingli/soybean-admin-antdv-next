@@ -82,7 +82,7 @@ async function handleAccountLogin(account: Account) {
     <AFormItem name="password">
       <AInputPassword v-model:value="model.password" :placeholder="$t('page.login.common.passwordPlaceholder')" />
     </AFormItem>
-    <ASpace direction="vertical" :size="24">
+    <div class="flex flex-col gap-24px">
       <div class="flex-y-center justify-between">
         <ACheckbox>{{ $t('page.login.pwdLogin.rememberMe') }}</ACheckbox>
         <AButton type="text" @click="toggleLoginModule('reset-pwd')">
@@ -106,7 +106,7 @@ async function handleAccountLogin(account: Account) {
           {{ item.label }}
         </AButton>
       </div>
-    </ASpace>
+    </div>
   </AForm>
 </template>
 

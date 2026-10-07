@@ -47,6 +47,7 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
     <div class="i-flex-center">
       <ASegmented
         :value="themeStore.themeScheme"
+        block
         size="small"
         class="relative w-214px"
         :options="schemaOptions"

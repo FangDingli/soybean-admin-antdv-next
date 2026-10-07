@@ -199,3 +199,14 @@
 - **开源化**：LICENSE 保留 Soybean 版权行并追加 FangDingli；package.json 补
   repository/author/bugs（github.com/FangDingli/soybean-admin-antdv-next）；README 由维护者手写，
   上游 README 重命名为 README-Soybean.md 保留。
+
+### WP8 补充：首轮 UI 反馈修复（3 处）
+
+- **ASpace 宽度差异**：naive NSpace 实际是全宽纵向堆叠，antd Space 是 inline-flex（内容收缩宽度）——
+  登录表单等需要与上方输入框对齐的场景，改用手写 `<div class="flex flex-col gap-Npx">` 更贴近原视觉。
+- **AAlert 默认插槽不渲染**：naive NAlert 的默认内容在 antd Alert 里必须放 `#description` 插槽，
+  默认插槽不是 description。
+- **ASegmented 项均分**：naive segment 形态的 NTabs 项会均分宽度，antd Segmented 默认按内容收缩——
+  加 `block` 属性使项均分至容器宽（配合既有 w-214px）。
+- **验证**：三处均已浏览器截图复验；并顺带实测了暗黑模式切换全链路（Segmented @change →
+  themeStore.darkMode → adapter 的 darkAlgorithm → 全局暗色），antdv 类名前缀确认为 `.ant-`。
