@@ -11,13 +11,13 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.general.title') }}</NDivider>
+  <ADivider>{{ $t('theme.general.title') }}</ADivider>
   <SettingItem :label="$t('theme.general.multilingual.visible')">
-    <NSwitch v-model:value="themeStore.header.multilingual.visible" />
+    <ASwitch v-model:checked="themeStore.header.multilingual.visible" />
   </SettingItem>
 
   <SettingItem :label="$t('theme.general.globalSearch.visible')">
-    <NSwitch v-model:value="themeStore.header.globalSearch.visible" />
+    <ASwitch v-model:checked="themeStore.header.globalSearch.visible" />
   </SettingItem>
 </template>
 

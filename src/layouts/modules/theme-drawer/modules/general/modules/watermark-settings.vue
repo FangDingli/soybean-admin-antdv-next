@@ -17,23 +17,23 @@ const isWatermarkTextVisible = computed(
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.general.watermark.title') }}</NDivider>
+  <ADivider>{{ $t('theme.general.watermark.title') }}</ADivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem key="1" :label="$t('theme.general.watermark.visible')">
-      <NSwitch v-model:value="themeStore.watermark.visible" />
+      <ASwitch v-model:checked="themeStore.watermark.visible" />
     </SettingItem>
     <SettingItem v-if="themeStore.watermark.visible" key="2" :label="$t('theme.general.watermark.enableUserName')">
-      <NSwitch :value="themeStore.watermark.enableUserName" @update:value="themeStore.setWatermarkEnableUserName" />
+      <ASwitch :checked="themeStore.watermark.enableUserName" @change="themeStore.setWatermarkEnableUserName" />
     </SettingItem>
     <SettingItem v-if="themeStore.watermark.visible" key="3" :label="$t('theme.general.watermark.enableTime')">
-      <NSwitch :value="themeStore.watermark.enableTime" @update:value="themeStore.setWatermarkEnableTime" />
+      <ASwitch :checked="themeStore.watermark.enableTime" @change="themeStore.setWatermarkEnableTime" />
     </SettingItem>
     <SettingItem
       v-if="themeStore.watermark.visible && themeStore.watermark.enableTime"
       key="4"
       :label="$t('theme.general.watermark.timeFormat')"
     >
-      <NSelect
+      <ASelect
         v-model:value="themeStore.watermark.timeFormat"
         :options="watermarkTimeFormatOptions"
         size="small"
@@ -41,7 +41,7 @@ const isWatermarkTextVisible = computed(
       />
     </SettingItem>
     <SettingItem v-if="isWatermarkTextVisible" key="5" :label="$t('theme.general.watermark.text')">
-      <NInput
+      <AInput
         v-model:value="themeStore.watermark.text"
         autosize
         type="text"

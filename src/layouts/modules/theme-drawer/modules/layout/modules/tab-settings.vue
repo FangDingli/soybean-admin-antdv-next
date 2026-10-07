@@ -13,22 +13,22 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.layout.tab.title') }}</NDivider>
+  <ADivider>{{ $t('theme.layout.tab.title') }}</ADivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem key="1" :label="$t('theme.layout.tab.visible')">
-      <NSwitch v-model:value="themeStore.tab.visible" />
+      <ASwitch v-model:checked="themeStore.tab.visible" />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="2" :label="$t('theme.layout.tab.cache')">
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.tab.cacheTip')" />
       </template>
-      <NSwitch v-model:value="themeStore.tab.cache" />
+      <ASwitch v-model:checked="themeStore.tab.cache" />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="3" :label="$t('theme.layout.tab.height')">
-      <NInputNumber v-model:value="themeStore.tab.height" size="small" :step="1" class="w-120px" />
+      <AInputNumber v-model:value="themeStore.tab.height" size="small" :step="1" class="w-120px" />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="4" :label="$t('theme.layout.tab.mode.title')">
-      <NSelect
+      <ASelect
         v-model:value="themeStore.tab.mode"
         :options="translateOptions(themeTabModeOptions)"
         size="small"
@@ -39,7 +39,7 @@ const themeStore = useThemeStore();
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.tab.closeByMiddleClickTip')" />
       </template>
-      <NSwitch v-model:value="themeStore.tab.closeTabByMiddleClick" />
+      <ASwitch v-model:checked="themeStore.tab.closeTabByMiddleClick" />
     </SettingItem>
   </TransitionGroup>
 </template>

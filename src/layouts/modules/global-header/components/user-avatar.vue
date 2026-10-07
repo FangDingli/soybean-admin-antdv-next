@@ -20,16 +20,11 @@ function loginOrRegister() {
 
 type DropdownKey = 'logout';
 
-type DropdownOption =
-  | {
-      key: DropdownKey;
-      label: string;
-      icon?: () => VNode;
-    }
-  | {
-      type: 'divider';
-      key: string;
-    };
+type DropdownOption = {
+  key: DropdownKey;
+  label: string;
+  icon?: () => VNode;
+};
 
 const options = computed(() => {
   const opts: DropdownOption[] = [
@@ -40,8 +35,17 @@ const options = computed(() => {
     }
   ];
 
-  return opts;
+  // antd Dropdown takes `menu.items` (icon is a VNode, not a render function)
+  return opts.map(opt => ({
+    key: opt.key,
+    label: opt.label,
+    icon: opt.icon?.()
+  }));
 });
+
+function handleMenuClick(info: { key: string | number }) {
+  handleDropdown(info.key as DropdownKey);
+}
 
 function logout() {
   window.$modal?.info({
@@ -66,17 +70,17 @@ function handleDropdown(key: DropdownKey) {
 </script>
 
 <template>
-  <NButton v-if="!authStore.isLogin" quaternary @click="loginOrRegister">
+  <AButton v-if="!authStore.isLogin" type="text" @click="loginOrRegister">
     {{ $t('page.login.common.loginOrRegister') }}
-  </NButton>
-  <NDropdown v-else placement="bottom" trigger="click" :options="options" @select="handleDropdown">
+  </AButton>
+  <ADropdown v-else placement="bottom" :trigger="['click']" :menu="{ items: options }" @menu-click="handleMenuClick">
     <div>
       <ButtonIcon>
         <SvgIcon icon="ph:user-circle" class="text-icon-large" />
         <span class="text-16px font-medium">{{ authStore.userInfo.userName }}</span>
       </ButtonIcon>
     </div>
-  </NDropdown>
+  </ADropdown>
 </template>
 
 <style scoped></style>

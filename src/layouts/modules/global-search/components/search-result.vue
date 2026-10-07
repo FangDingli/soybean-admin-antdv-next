@@ -30,7 +30,8 @@ function handleTo() {
 </script>
 
 <template>
-  <NScrollbar>
+  <!-- antdv has no scrollbar component; plain CSS overflow replaces naive NScrollbar -->
+  <div class="max-h-400px overflow-y-auto">
     <div class="pb-12px">
       <template v-for="item in options" :key="item.routePath">
         <div
@@ -50,7 +51,7 @@ function handleTo() {
         </div>
       </template>
     </div>
-  </NScrollbar>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

@@ -93,7 +93,13 @@ const options = computed(() => {
     }
   });
 
-  return result;
+  // antd Dropdown takes `menu.items` (icon is a VNode, not a render function)
+  return result.map(opt => ({
+    key: opt.key,
+    label: opt.label,
+    disabled: opt.disabled,
+    icon: opt.icon?.()
+  }));
 });
 
 function hideDropdown() {
@@ -128,19 +134,33 @@ function handleDropdown(optionKey: App.Global.DropdownKey) {
   dropdownAction[optionKey]?.();
   hideDropdown();
 }
+
+function handleMenuClick(info: { key: string | number }) {
+  handleDropdown(info.key as App.Global.DropdownKey);
+}
+
+function handleOpenChange(open: boolean) {
+  if (!open) {
+    hideDropdown();
+  }
+}
 </script>
 
 <template>
-  <NDropdown
-    :show="visible"
-    placement="bottom-start"
-    trigger="manual"
-    :x="x"
-    :y="y"
-    :options="options"
-    @clickoutside="hideDropdown"
-    @select="handleDropdown"
-  />
+  <!--
+ naive NDropdown supports absolute x/y positioning; antd Dropdown anchors to its default slot,
+       so we plant a zero-size anchor at the right-click point 
+-->
+  <ADropdown
+    :open="visible"
+    placement="bottomLeft"
+    :trigger="['contextmenu']"
+    :menu="{ items: options }"
+    @open-change="handleOpenChange"
+    @menu-click="handleMenuClick"
+  >
+    <div class="fixed size-0" :style="{ left: `${x}px`, top: `${y}px` }"></div>
+  </ADropdown>
 </template>
 
 <style scoped></style>

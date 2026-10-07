@@ -9,10 +9,6 @@ defineOptions({
 
 const themeStore = useThemeStore();
 
-function handleUpdateColor(color: string, key: App.Theme.ThemeColorKey) {
-  themeStore.updateThemeColors(key, color);
-}
-
 const swatches: string[] = [
   '#3b82f6',
   '#6366f1',
@@ -31,6 +27,16 @@ const swatches: string[] = [
   '#22c55e',
   '#10b981'
 ];
+
+// antd ColorPicker presets are grouped by label, naive used a flat swatch list
+const colorPresets = [{ label: 'SoybeanAdmin', colors: swatches }];
+
+// antd ColorPicker's change event emits (color, hex); the hex string is what the theme store wants
+function handleColorChange(key: App.Theme.ThemeColorKey) {
+  return (_color: unknown, hex: string) => {
+    themeStore.updateThemeColors(key, hex);
+  };
+}
 </script>
 
 <template>
@@ -42,20 +48,19 @@ const swatches: string[] = [
           <p>
             <span class="pr-12px">{{ $t('theme.appearance.recommendColorDesc') }}</span>
             <br />
-            <NButton
-              text
-              tag="a"
+            <AButton
+              type="link"
               href="https://uicolors.app/create"
               target="_blank"
               rel="noopener noreferrer"
               class="text-gray"
             >
               https://uicolors.app/create
-            </NButton>
+            </AButton>
           </p>
         </IconTooltip>
       </template>
-      <NSwitch v-model:value="themeStore.recommendColor" />
+      <ASwitch v-model:checked="themeStore.recommendColor" />
     </SettingItem>
 
     <SettingItem
@@ -64,17 +69,19 @@ const swatches: string[] = [
       :label="$t(`theme.appearance.themeColor.${key}`)"
     >
       <template v-if="key === 'info'" #suffix>
-        <NCheckbox v-model:checked="themeStore.isInfoFollowPrimary">
+        <ACheckbox v-model:checked="themeStore.isInfoFollowPrimary">
           {{ $t('theme.appearance.themeColor.followPrimary') }}
-        </NCheckbox>
+        </ACheckbox>
       </template>
       <div class="w-90px">
-        <NColorPicker
+        <!-- valueFormat="hex" makes the change event emit a plain hex string (naive emitted strings) -->
+        <AColorPicker
           :value="themeStore.themeColors[key]"
+          value-format="hex"
           :disabled="key === 'info' && themeStore.isInfoFollowPrimary"
-          :show-alpha="false"
-          :swatches="swatches"
-          @update:value="handleUpdateColor($event, key)"
+          :disabled-alpha="true"
+          :presets="colorPresets"
+          @change="handleColorChange(key)"
         />
       </div>
     </SettingItem>

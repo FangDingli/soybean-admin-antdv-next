@@ -4,6 +4,7 @@ import type { RouteKey } from '@elegant-router/types';
 import { useThemeStore } from '@/store/modules/theme';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
+import { getAntdMenuItems } from '../global-menu/shared';
 
 defineOptions({
   name: 'GlobalBreadcrumb'
@@ -22,10 +23,14 @@ const [DefineBreadcrumbContent, BreadcrumbContent] = createReusableTemplate<Brea
 function handleClickMenu(key: RouteKey) {
   routerPushByKey(key);
 }
+
+function handleMenuClick(info: { key: string | number }) {
+  handleClickMenu(info.key as RouteKey);
+}
 </script>
 
 <template>
-  <NBreadcrumb v-if="themeStore.header.breadcrumb.visible">
+  <ABreadcrumb v-if="themeStore.header.breadcrumb.visible">
     <!-- define component start: BreadcrumbContent -->
     <DefineBreadcrumbContent v-slot="{ breadcrumb }">
       <div class="i-flex-y-center align-middle">
@@ -35,13 +40,17 @@ function handleClickMenu(key: RouteKey) {
     </DefineBreadcrumbContent>
     <!-- define component end: BreadcrumbContent -->
 
-    <NBreadcrumbItem v-for="item in routeStore.breadcrumbs" :key="item.key">
-      <NDropdown v-if="item.options?.length" :options="item.options" @select="handleClickMenu">
+    <ABreadcrumbItem v-for="item in routeStore.breadcrumbs" :key="item.key">
+      <ADropdown
+        v-if="item.options?.length"
+        :menu="{ items: getAntdMenuItems(item.options) }"
+        @menu-click="handleMenuClick"
+      >
         <BreadcrumbContent :breadcrumb="item" />
-      </NDropdown>
+      </ADropdown>
       <BreadcrumbContent v-else :breadcrumb="item" />
-    </NBreadcrumbItem>
-  </NBreadcrumb>
+    </ABreadcrumbItem>
+  </ABreadcrumb>
 </template>
 
 <style scoped></style>

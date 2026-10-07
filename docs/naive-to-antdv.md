@@ -139,3 +139,29 @@
   跟随暗色 token。菜单自带的右边框用 `border-r-0` 去掉（naive 无边框）。视觉微调留到 WP8 浏览器冒烟。
 - **类型导出差异**：`ItemType` 需从 `antdv-next/dist/menu/interface` 深导入（主入口不导出）。
 - `first-level-menu.vue`（混合布局的一级菜单）是纯手写组件，无需改动。
+
+### WP6 布局其余（19 个文件）
+
+- **机械映射**（settings 9 件批量处理）：`NDivider→ADivider`、`NInputNumber→AInputNumber`（v-model:value 通用）、
+  `NSelect→ASelect`（{label,value} options 直接兼容）、`NInput→AInput`（`clearable→allowClear`，
+  文本输入无 autosize 概念直接删）、`NSwitch v-model:value→ASwitch v-model:checked`、
+  `NSwitch :value+@update:value→ASwitch :checked+@change`。
+- **NDrawer**：`v-model:show→v-model:open`；naive 的 NDrawerContent（title/closable/footer 插槽）合并进 ADrawer 本体；
+  `display-directive="show"` 无对应（antd 默认关闭后保留挂载）；`:native-scrollbar` 删除。
+- **NTabs type="segment" → ASegmented**：naive 用 segment 形态的 Tabs 做切换器，antdv 有专门的 Segmented
+  组件（block 属性对应满宽）；选项里的图标用 h(SvgIcon) 构造。
+- **NColorPicker → AColorPicker**：`show-alpha={false}→disabled-alpha`；`swatches`（扁平色板）→
+  `presets`（按 label 分组）；**`valueFormat="hex"` 让 change 事件吐 hex 字符串**（否则是 Color 对象），
+  change 回调取第二个参数 hex 即可保持原字符串协议。
+- **NBadge**：`type="info"` → `color="blue"`；`:value` → `:count`。
+- **NButton `text tag="a"`** → `AButton type="link"`（href/target 直通）。
+- **NModal preset="card" → AModal**：位置用 `:style="{top}"` + wrap-class-name 控制；
+  `@after-leave→@after-close`；`NInputGroup→ASpaceCompact block`；footer 用 #footer 插槽。
+- **NScrollbar 无对应**：全局搜索结果列表改 CSS `overflow-y-auto`；theme-drawer 内 SimpleScrollbar
+  （@sa/materials，基于 better-scroll）不受影响。
+- **NDropdown 定位差异（重要）**：naive 支持 `:x/:y` 绝对定位 + `trigger="manual"`（标签右键菜单场景）；
+  antd Dropdown 只能锚定默认插槽元素——移植方案是在右键坐标处放一个 `fixed size-0` 的零尺寸锚点元素，
+  `:open` 受控 + `@open-change` 关闭 + `@menu-click` 处理。
+- **Dropdown 的 `trigger` 必须用 `:` 绑定数组**（`trigger="['click']"` 字符串会类型报错）。
+- **面包屑**：`NBreadcrumb/NBreadcrumbItem→ABreadcrumb/ABreadcrumbItem`；下拉用 WP5 的
+  `getAntdMenuItems` 适配器复用。

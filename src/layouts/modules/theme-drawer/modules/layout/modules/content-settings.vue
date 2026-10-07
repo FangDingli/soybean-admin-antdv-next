@@ -16,13 +16,13 @@ const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wra
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.layout.content.title') }}</NDivider>
+  <ADivider>{{ $t('theme.layout.content.title') }}</ADivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem key="1" :label="$t('theme.layout.content.scrollMode.title')">
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.content.scrollMode.tip')" />
       </template>
-      <NSelect
+      <ASelect
         v-model:value="themeStore.layout.scrollMode"
         :options="translateOptions(themeScrollModeOptions)"
         size="small"
@@ -30,10 +30,10 @@ const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wra
       />
     </SettingItem>
     <SettingItem key="2" :label="$t('theme.layout.content.page.animate')">
-      <NSwitch v-model:value="themeStore.page.animate" />
+      <ASwitch v-model:checked="themeStore.page.animate" />
     </SettingItem>
     <SettingItem v-if="themeStore.page.animate" key="3" :label="$t('theme.layout.content.page.mode.title')">
-      <NSelect
+      <ASelect
         v-model:value="themeStore.page.animateMode"
         :options="translateOptions(themePageAnimationModeOptions)"
         size="small"
@@ -41,7 +41,7 @@ const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wra
       />
     </SettingItem>
     <SettingItem v-if="isWrapperScrollMode" key="4" :label="$t('theme.layout.content.fixedHeaderAndTab')">
-      <NSwitch v-model:value="themeStore.fixedHeaderAndTab" />
+      <ASwitch v-model:checked="themeStore.fixedHeaderAndTab" />
     </SettingItem>
   </TransitionGroup>
 </template>

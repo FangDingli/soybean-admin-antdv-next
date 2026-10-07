@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 import { themeSchemaRecord } from '@/constants/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { $t } from '@/locales';
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import SettingItem from '../../../components/setting-item.vue';
 
 defineOptions({
@@ -16,6 +17,14 @@ const icons: Record<UnionKey.ThemeScheme, string> = {
   dark: 'material-symbols:nightlight-rounded',
   auto: 'material-symbols:hdr-auto'
 };
+
+// naive used segment-style NTabs; antdv-next has a dedicated Segmented component
+const schemaOptions = computed(() =>
+  Object.entries(themeSchemaRecord).map(([key]) => ({
+    value: key,
+    label: () => h(SvgIcon, { icon: icons[key as UnionKey.ThemeScheme], class: 'h-23px text-icon-small' })
+  }))
+);
 
 function handleSegmentChange(value: string | number) {
   themeStore.setThemeScheme(value as UnionKey.ThemeScheme);
@@ -33,32 +42,27 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.appearance.themeSchema.title') }}</NDivider>
+  <ADivider>{{ $t('theme.appearance.themeSchema.title') }}</ADivider>
   <div class="flex-col-stretch gap-16px">
     <div class="i-flex-center">
-      <NTabs
-        :key="themeStore.themeScheme"
-        type="segment"
+      <ASegmented
+        :value="themeStore.themeScheme"
         size="small"
         class="relative w-214px"
-        :value="themeStore.themeScheme"
-        @update:value="handleSegmentChange"
-      >
-        <NTab v-for="(_, key) in themeSchemaRecord" :key="key" :name="key">
-          <SvgIcon :icon="icons[key]" class="h-23px text-icon-small" />
-        </NTab>
-      </NTabs>
+        :options="schemaOptions"
+        @change="handleSegmentChange"
+      />
     </div>
     <Transition name="sider-inverted">
       <SettingItem v-if="showSiderInverted" :label="$t('theme.layout.sider.inverted')">
-        <NSwitch v-model:value="themeStore.sider.inverted" />
+        <ASwitch v-model:checked="themeStore.sider.inverted" />
       </SettingItem>
     </Transition>
     <SettingItem :label="$t('theme.appearance.grayscale')">
-      <NSwitch :value="themeStore.grayscale" @update:value="handleGrayscaleChange" />
+      <ASwitch :checked="themeStore.grayscale" @change="handleGrayscaleChange" />
     </SettingItem>
     <SettingItem :label="$t('theme.appearance.colourWeakness')">
-      <NSwitch :value="themeStore.colourWeakness" @update:value="handleColourWeaknessChange" />
+      <ASwitch :checked="themeStore.colourWeakness" @change="handleColourWeaknessChange" />
     </SettingItem>
   </div>
 </template>
