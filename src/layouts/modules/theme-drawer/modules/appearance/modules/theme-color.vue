@@ -40,7 +40,7 @@ function handleColorChange(key: App.Theme.ThemeColorKey) {
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.appearance.themeColor.title') }}</NDivider>
+  <ADivider>{{ $t('theme.appearance.themeColor.title') }}</ADivider>
   <div class="flex-col-stretch gap-12px">
     <SettingItem key="recommend-color" :label="$t('theme.appearance.recommendColor')">
       <template #suffix>

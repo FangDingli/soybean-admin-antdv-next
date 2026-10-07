@@ -5,7 +5,6 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import { AntdvNextResolver } from '@antdv-next/auto-import-resolver';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 
@@ -32,8 +31,6 @@ export function setupUnplugin(viteEnv: Env.ImportMeta) {
       dts: 'src/typings/components.d.ts',
       types: [{ from: 'vue-router', names: ['RouterLink', 'RouterView'] }],
       resolvers: [
-        // FIXME(WP8): remove NaiveUiResolver after all naive-ui components are converted
-        NaiveUiResolver(),
         AntdvNextResolver(),
         IconsResolver({ customCollections: [collectionName], componentPrefix: VITE_ICON_PREFIX })
       ]

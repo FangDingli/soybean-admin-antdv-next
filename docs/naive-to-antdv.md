@@ -183,3 +183,19 @@
 - **浏览器实测（apifox mock 在线）**：登录页全链路 ✓、登录成功 notification ✓、
   水平+侧边 AMenu 选中高亮 ✓、头像下拉 ✓、主题抽屉（ASegmented/ASwitch/AColorPicker/ACheckbox）✓、
   home 各卡片与图表 ✓。
+
+### WP8 验收与开源化
+
+- **依赖清零**：`package.json` 移除 `naive-ui`；`unplugin.ts` 移除 `NaiveUiResolver`（双 resolver 过渡结束）；
+  `tsconfig.json` 的 `types` 移除 `naive-ui/volar`（⚠️ 容易漏的一处，报错形态是
+  `Cannot find type definition file for 'naive-ui/volar'`）。
+- **残留归零**：`grep -rnE "<N[A-Z][a-zA-Z]|from 'naive-ui'" src build packages` 为空；
+  代码中保留的 naive 字样均为迁移说明注释（有意保留）。
+- **漏网案例**：`theme-color.vue` 顶部 `<NDivider>` 在手工编辑时被遗漏——
+  naive 被卸载后 Vue 把未解析组件**静默降级为原生标签**，页面照常渲染不易察觉，
+  必须靠 grep 兜底（教训已记）。
+- **components.d.ts**：随 dev 自动再生，N\* 声明随页面访问逐步消失。
+- **浏览器验收**（apifox mock）：403 / 404 / 500 异常页全部正常。
+- **开源化**：LICENSE 保留 Soybean 版权行并追加 FangDingli；package.json 补
+  repository/author/bugs（github.com/FangDingli/soybean-admin-antdv-next）；README 由维护者手写，
+  上游 README 重命名为 README-Soybean.md 保留。
