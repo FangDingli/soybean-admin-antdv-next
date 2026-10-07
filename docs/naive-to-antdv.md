@@ -102,3 +102,24 @@
   `['hover']`，`trigger="hover"` 字符串写法类型报错；选中用 `menu.selectable + menu.selectedKeys`；
   点选事件用组件的 `menu-click` 事件。naive 逐项 `props.class`（mb-1 间距 hack）antdv 菜单项不支持，删除。
 - **Button**：naive `quaternary` → antdv `type="text"`（或 `variant="text"`）；naive `size="tiny"` → `size="small"`。
+
+### WP4 表格
+
+- **类型命名空间**：`typings/naive-ui.d.ts` 的 `NaiveUI.*` → `typings/table.d.ts` 的 `App.Table.*`
+  （ColumnCheck/ColumnFixed/ColumnType/ColumnGroupType/TableColumn/OperateType），
+  列类型来自 `antdv-next/dist/table/interface` 的 `ColumnType` / `ColumnGroupType`。
+- **hook 改名**：`useNaiveTable` → `useAntdvTable`，`useNaivePaginatedTable` → `useAntdvPaginatedTable`
+  （模板内无外部消费方，改名零成本）。
+- **分页模型**：naive `PaginationProps` → antd `TablePaginationConfig`：
+  `page→current`、`itemCount→total`、`showSizePicker→showSizeChanger`、`pageSizes→pageSizeOptions`、
+  `prefix(itemCount)=>showTotal(total)`、`onUpdatePage/onUpdatePageSize→onChange(current,pageSize)`、
+  移动端 `pageSlot:3→simple:true`。
+- **selection/expand 列分支删除**：naive 把选择列/展开列当作 columns 的一员（`type:'selection'|'expand'`），
+  antd 走独立的 `rowSelection` / `expandable` props，不在 columns 里——列设置只处理真实列，
+  `SELECTION_KEY`/`EXPAND_KEY` 分支移除。
+- **`fixed` 归一**：antd 的 `fixed` 类型是 `'left'|'right'|boolean`（含 `false`），
+  列设置模型是 `'left'|'right'|'unFixed'`，双向转换处各做一次显式归一。
+- **advanced 组件**：`NPopover` → `APopover`（内容进 `#content` 插槽，placement `bottom-end`→`bottomRight`）；
+  `NPopconfirm @positive-click` → `APopconfirm :title + @confirm`（确认文本从默认插槽改为 `title`）；
+  naive `type="error" ghost` 按钮 → `AButton type="primary" ghost danger`；
+  `NCheckbox` 的 `v-model:checked`/`indeterminate` antdv 原生支持，直接换标签。
