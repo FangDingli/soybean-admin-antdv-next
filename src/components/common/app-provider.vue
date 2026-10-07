@@ -1,39 +1,26 @@
 <script setup lang="ts">
-import { createTextVNode, defineComponent } from 'vue';
-import { useDialog, useLoadingBar, useMessage, useNotification } from 'naive-ui';
+import { App, Modal, message, notification } from 'antdv-next';
 
 defineOptions({
   name: 'AppProvider'
 });
 
-const ContextHolder = defineComponent({
-  name: 'ContextHolder',
-  setup() {
-    function register() {
-      window.$loadingBar = useLoadingBar();
-      window.$dialog = useDialog();
-      window.$message = useMessage();
-      window.$notification = useNotification();
-    }
+const [messageApi, MessageContextHolder] = message.useMessage();
+const [notificationApi, NotificationContextHolder] = notification.useNotification();
+const [modalApi, ModalContextHolder] = Modal.useModal();
 
-    register();
-
-    return () => createTextVNode();
-  }
-});
+window.$message = messageApi;
+window.$notification = notificationApi;
+window.$modal = modalApi;
 </script>
 
 <template>
-  <NLoadingBarProvider>
-    <NDialogProvider>
-      <NNotificationProvider>
-        <NMessageProvider>
-          <ContextHolder />
-          <slot></slot>
-        </NMessageProvider>
-      </NNotificationProvider>
-    </NDialogProvider>
-  </NLoadingBarProvider>
+  <App class="h-full">
+    <component :is="MessageContextHolder" />
+    <component :is="NotificationContextHolder" />
+    <component :is="ModalContextHolder" />
+    <slot></slot>
+  </App>
 </template>
 
 <style scoped></style>

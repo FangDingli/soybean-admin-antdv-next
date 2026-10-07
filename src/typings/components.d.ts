@@ -12,7 +12,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AConfigProvider: typeof import('antdv-next')['ConfigProvider']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+    AWatermark: typeof import('antdv-next')['Watermark']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
@@ -89,7 +91,9 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AConfigProvider: typeof import('antdv-next')['ConfigProvider']
   const AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+  const AWatermark: typeof import('antdv-next')['Watermark']
   const BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
   const ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
   const CountTo: typeof import('./../components/custom/count-to.vue')['default']

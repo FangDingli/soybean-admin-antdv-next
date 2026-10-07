@@ -51,14 +51,13 @@ export function showErrorMsg(state: RequestInstanceState, message: string) {
   if (!isExist) {
     state.errMsgStack.push(message);
 
-    window.$message?.error(message, {
-      onLeave: () => {
-        state.errMsgStack = state.errMsgStack.filter(msg => msg !== message);
+    // antdv message's 2nd arg is the close callback (naive's `onLeave` equivalent)
+    window.$message?.error(message, () => {
+      state.errMsgStack = state.errMsgStack.filter(msg => msg !== message);
 
-        setTimeout(() => {
-          state.errMsgStack = [];
-        }, 5000);
-      }
+      setTimeout(() => {
+        state.errMsgStack = [];
+      }, 5000);
     });
   }
 }

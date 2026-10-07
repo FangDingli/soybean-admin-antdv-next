@@ -44,12 +44,12 @@ const options = computed(() => {
 });
 
 function logout() {
-  window.$dialog?.info({
+  window.$modal?.info({
     title: $t('common.tip'),
     content: $t('common.logoutConfirm'),
-    positiveText: $t('common.confirm'),
-    negativeText: $t('common.cancel'),
-    onPositiveClick: () => {
+    okText: $t('common.confirm'),
+    cancelText: $t('common.cancel'),
+    onOk: () => {
       authStore.resetStore();
     }
   });

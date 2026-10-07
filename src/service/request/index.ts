@@ -66,16 +66,16 @@ export const request = createFlatRequest(
         // prevent the user from refreshing the page
         window.addEventListener('beforeunload', handleLogout);
 
-        window.$dialog?.error({
+        window.$modal?.error({
           title: $t('common.error'),
           content: response.data.msg,
-          positiveText: $t('common.confirm'),
+          okText: $t('common.confirm'),
           maskClosable: false,
-          closeOnEsc: false,
-          onPositiveClick() {
+          keyboard: false,
+          onOk() {
             logoutAndCleanup();
           },
-          onClose() {
+          onCancel() {
             logoutAndCleanup();
           }
         });

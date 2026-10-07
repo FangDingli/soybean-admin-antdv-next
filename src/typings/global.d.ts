@@ -4,14 +4,12 @@ declare global {
   export interface Window {
     /** NProgress instance */
     NProgress?: import('nprogress').NProgress;
-    /** Loading bar instance */
-    $loadingBar?: import('naive-ui').LoadingBarProviderInst;
-    /** Dialog instance */
-    $dialog?: import('naive-ui').DialogProviderInst;
-    /** Message instance */
-    $message?: import('naive-ui').MessageProviderInst;
-    /** Notification instance */
-    $notification?: import('naive-ui').NotificationProviderInst;
+    /** Modal hook api (from `Modal.useModal()`) */
+    $modal?: import('antdv-next/dist/modal/useModal/types').HookAPI;
+    /** Message instance (from `message.useMessage()`) */
+    $message?: import('antdv-next/dist/message/interface').MessageInstance;
+    /** Notification instance (from `notification.useNotification()`) */
+    $notification?: import('antdv-next/dist/notification/interface').NotificationInstance;
   }
 
   /** Build time of the project */

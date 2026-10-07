@@ -4,9 +4,6 @@ declare namespace App {
   namespace Theme {
     type ColorPaletteNumber = import('@sa/color').ColorPaletteNumber;
 
-    /** NaiveUI theme overrides that can be specified in preset */
-    type NaiveUIThemeOverride = import('naive-ui').GlobalThemeOverrides;
-
     /** Theme setting */
     interface ThemeSetting {
       /** Theme scheme */
@@ -282,6 +279,7 @@ declare namespace App {
     };
 
     /** Form rule */
+    // TODO(WP7): switch to `import('antdv-next').RuleObject` together with hooks/common/form.ts and the login forms
     type FormRule = import('naive-ui').FormItemRule;
 
     /** The global dropdown key */

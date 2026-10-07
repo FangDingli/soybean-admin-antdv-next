@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { App } from 'vue';
-import { NButton } from 'naive-ui';
+import { Button } from 'antdv-next';
 import { $t } from '@/locales';
 
 export function setupAppErrorHandle(app: App) {
@@ -33,33 +33,36 @@ export function setupAppVersionNotification() {
     isShow = true;
 
     // Show update notification
-    const n = window.$notification?.create({
+    // antdv-next hook api has no `create`; close the notification by its `key`
+    const NOTIFICATION_KEY = 'app-version-update';
+
+    window.$notification?.open({
+      key: NOTIFICATION_KEY,
       title: $t('system.updateTitle'),
-      content: $t('system.updateContent'),
-      action() {
-        return h('div', { style: { display: 'flex', justifyContent: 'end', gap: '12px', width: '325px' } }, [
-          h(
-            NButton,
-            {
-              onClick() {
-                n?.destroy();
-                isShow = false;
-              }
-            },
-            () => $t('system.updateCancel')
-          ),
-          h(
-            NButton,
-            {
-              type: 'primary',
-              onClick() {
-                location.reload();
-              }
-            },
-            () => $t('system.updateConfirm')
-          )
-        ]);
-      },
+      description: $t('system.updateContent'),
+      // antdv-next notification field names: `title` / `description` / `actions` (not antd v5's `message` / `btn`)
+      actions: h('div', { style: { display: 'flex', justifyContent: 'end', gap: '12px', width: '325px' } }, [
+        h(
+          Button,
+          {
+            onClick() {
+              window.$notification?.destroy(NOTIFICATION_KEY);
+              isShow = false;
+            }
+          },
+          { default: () => $t('system.updateCancel') }
+        ),
+        h(
+          Button,
+          {
+            type: 'primary',
+            onClick() {
+              location.reload();
+            }
+          },
+          { default: () => $t('system.updateConfirm') }
+        )
+      ]),
       onClose() {
         isShow = false;
       }
