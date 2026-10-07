@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { SimpleScrollbar } from '@sa/materials';
 import type { RouteKey } from '@elegant-router/types';
@@ -9,6 +9,7 @@ import { useThemeStore } from '@/store/modules/theme';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { useMenu, useMixMenuContext } from '../context';
+import { getAntdMenuItems } from '../shared';
 
 defineOptions({
   name: 'TopHybridHeaderFirst'
@@ -28,17 +29,32 @@ const {
 } = useMixMenuContext('TopHybridHeaderFirst');
 const { selectedKey } = useMenu();
 
+const firstLevelMenuItems = computed(() => getAntdMenuItems(firstLevelMenus.value));
+const secondLevelMenuItems = computed(() => getAntdMenuItems(secondLevelMenus.value));
+
+const siderMenuStyle = computed(() => ({
+  width: appStore.siderCollapse ? `${themeStore.sider.collapsedWidth}px` : '100%'
+}));
+
 const expandedKeys = ref<string[]>([]);
 
 /**
  * Handle first level menu select
  * @param key RouteKey
  */
+function handleSelectFirstLevelMenuClick(info: { key: string | number }) {
+  handleSelectMenu(info.key as RouteKey);
+}
+
 function handleSelectMenu(key: RouteKey) {
   handleSelectFirstLevelMenu(key);
 
   // if there are second level menus, select the deepest one by default
   activeDeepestLevelMenuKey();
+}
+
+function handleMenuClick(info: { key: string | number }) {
+  routerPushByKeyWithMetaQuery(info.key as RouteKey);
 }
 
 function updateExpandedKeys() {
@@ -60,27 +76,25 @@ watch(
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
+    <AMenu
       mode="horizontal"
-      :value="activeFirstLevelMenuKey"
-      :options="firstLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="handleSelectMenu"
+      :selected-keys="[activeFirstLevelMenuKey]"
+      :items="firstLevelMenuItems"
+      @click="handleSelectFirstLevelMenuClick"
     />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <SimpleScrollbar>
-      <NMenu
-        v-model:expanded-keys="expandedKeys"
-        mode="vertical"
-        :value="selectedKey"
-        :collapsed="appStore.siderCollapse"
-        :collapsed-width="themeStore.sider.collapsedWidth"
-        :collapsed-icon-size="22"
-        :options="secondLevelMenus"
-        :indent="18"
-        @update:value="routerPushByKeyWithMetaQuery"
+      <AMenu
+        v-model:open-keys="expandedKeys"
+        mode="inline"
+        :selected-keys="[selectedKey]"
+        :inline-collapsed="appStore.siderCollapse"
+        :items="secondLevelMenuItems"
+        :inline-indent="18"
+        :style="siderMenuStyle"
+        class="border-r-0"
+        @click="handleMenuClick"
       />
     </SimpleScrollbar>
   </Teleport>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import type { RouteKey } from '@elegant-router/types';
 import { SimpleScrollbar } from '@sa/materials';
 import { GLOBAL_SIDER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';
@@ -8,6 +9,7 @@ import { useThemeStore } from '@/store/modules/theme';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { useMenu } from '../context';
+import { getAntdMenuItems } from '../shared';
 
 defineOptions({
   name: 'VerticalMenu'
@@ -21,6 +23,16 @@ const { routerPushByKeyWithMetaQuery } = useRouterPush();
 const { selectedKey } = useMenu();
 
 const inverted = computed(() => !themeStore.darkMode && themeStore.sider.inverted);
+
+const menuItems = computed(() => getAntdMenuItems(routeStore.menus));
+
+const menuStyle = computed(() => ({
+  width: appStore.siderCollapse ? `${themeStore.sider.collapsedWidth}px` : '100%'
+}));
+
+function handleMenuClick(info: { key: string | number }) {
+  routerPushByKeyWithMetaQuery(info.key as RouteKey);
+}
 
 const expandedKeys = ref<string[]>([]);
 
@@ -44,17 +56,17 @@ watch(
 <template>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <SimpleScrollbar>
-      <NMenu
-        v-model:expanded-keys="expandedKeys"
-        mode="vertical"
-        :value="selectedKey"
-        :collapsed="appStore.siderCollapse"
-        :collapsed-width="themeStore.sider.collapsedWidth"
-        :collapsed-icon-size="22"
-        :options="routeStore.menus"
-        :inverted="inverted"
-        :indent="18"
-        @update:value="routerPushByKeyWithMetaQuery"
+      <AMenu
+        v-model:open-keys="expandedKeys"
+        mode="inline"
+        :selected-keys="[selectedKey]"
+        :inline-collapsed="appStore.siderCollapse"
+        :items="menuItems"
+        :theme="inverted ? 'dark' : 'light'"
+        :inline-indent="18"
+        :style="menuStyle"
+        class="border-r-0"
+        @click="handleMenuClick"
       />
     </SimpleScrollbar>
   </Teleport>

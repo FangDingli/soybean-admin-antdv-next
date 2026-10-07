@@ -123,3 +123,19 @@
   `NPopconfirm @positive-click` → `APopconfirm :title + @confirm`（确认文本从默认插槽改为 `title`）；
   naive `type="error" ghost` 按钮 → `AButton type="primary" ghost danger`；
   `NCheckbox` 的 `v-model:checked`/`indeterminate` antdv 原生支持，直接换标签。
+
+### WP5 菜单
+
+- **适配器**：新增 `src/layouts/modules/global-menu/shared.ts` 的 `getAntdMenuItems(menus)`，
+  把 soybean 自有的 `App.Global.Menu[]` 转 antdv `ItemType[]`（icon 从 `() => VNode` 渲染函数直接求值为 VNode）。
+  上游 naive 版不需要这层（MenuOption 形状恰好兼容），是本次迁移新增的唯一非平凡逻辑。
+- **模式映射**：naive 的 `mode="vertical"`（侧边栏可展开子菜单）→ antdv 的 `mode="inline"`；
+  水平菜单同为 `horizontal`，antdv 自带溢出收进 "..."（对应 naive 的 `responsive`）。
+- **属性映射**：`v-model:expanded-keys` → `v-model:openKeys`；`:value` → `:selected-keys`（数组）；
+  `:collapsed` → `:inline-collapsed`；`:indent` → `:inline-indent`；`@update:value` → `@click`（参数从 key 变为 `MenuInfo`）。
+- **`:collapsed-width` 无对应**：antdv 收起宽度由组件自定（约 80px），且 `inlineCollapsed` 单用不改变根宽度——
+  侧边菜单显式绑定根节点 `style.width`（收起时取 `themeStore.sider.collapsedWidth`，展开 100%）。
+- **`:inverted` 无对应**：用 `theme="dark"` 近似（浅色模式下的深色侧栏）；暗黑模式下沿用 light 主题
+  跟随暗色 token。菜单自带的右边框用 `border-r-0` 去掉（naive 无边框）。视觉微调留到 WP8 浏览器冒烟。
+- **类型导出差异**：`ItemType` 需从 `antdv-next/dist/menu/interface` 深导入（主入口不导出）。
+- `first-level-menu.vue`（混合布局的一级菜单）是纯手写组件，无需改动。

@@ -11,6 +11,7 @@ import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';
 import { useMenu, useMixMenuContext } from '../context';
+import { getAntdMenuItems } from '../shared';
 import FirstLevelMenu from '../components/first-level-menu.vue';
 import GlobalLogo from '../../global-logo/index.vue';
 
@@ -57,6 +58,12 @@ function handleResetActiveMenu() {
 }
 
 const expandedKeys = ref<string[]>([]);
+
+const menuItems = computed(() => getAntdMenuItems(secondLevelMenus.value));
+
+function handleMenuClick(info: { key: string | number }) {
+  routerPushByKeyWithMetaQuery(info.key as RouteKey);
+}
 
 function updateExpandedKeys() {
   if (appStore.siderCollapse || !selectedKey.value) {
@@ -108,14 +115,16 @@ watch(
             />
           </header>
           <SimpleScrollbar>
-            <NMenu
-              v-model:expanded-keys="expandedKeys"
-              mode="vertical"
-              :value="selectedKey"
-              :options="secondLevelMenus"
-              :inverted="inverted"
-              :indent="18"
-              @update:value="routerPushByKeyWithMetaQuery"
+            <AMenu
+              v-model:open-keys="expandedKeys"
+              mode="inline"
+              :selected-keys="[selectedKey]"
+              :items="menuItems"
+              :theme="inverted ? 'dark' : 'light'"
+              :inline-indent="18"
+              style="width: 100%"
+              class="border-r-0"
+              @click="handleMenuClick"
             />
           </SimpleScrollbar>
         </DarkModeContainer>

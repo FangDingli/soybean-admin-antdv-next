@@ -10,6 +10,7 @@ import { useThemeStore } from '@/store/modules/theme';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { useMenu, useMixMenuContext } from '../context';
+import { getAntdMenuItems } from '../shared';
 import FirstLevelMenu from '../components/first-level-menu.vue';
 import GlobalLogo from '../../global-logo/index.vue';
 
@@ -91,6 +92,17 @@ function handleResetActiveMenu() {
 
 const expandedKeys = ref<string[]>([]);
 
+const firstLevelMenuItems = computed(() => getAntdMenuItems(firstLevelMenus.value));
+const childLevelMenuItems = computed(() => getAntdMenuItems(childLevelMenus.value));
+
+function handleSelectFirstLevelMenuClick(info: { key: string | number }) {
+  handleSelectMenu(info.key as RouteKey);
+}
+
+function handleMenuClick(info: { key: string | number }) {
+  routerPushByKeyWithMetaQuery(info.key as RouteKey);
+}
+
 function updateExpandedKeys() {
   if (appStore.siderCollapse || !selectedKey.value) {
     expandedKeys.value = [];
@@ -110,13 +122,11 @@ watch(
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
+    <AMenu
       mode="horizontal"
-      :value="activeFirstLevelMenuKey"
-      :options="firstLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="handleSelectMenu"
+      :selected-keys="[activeFirstLevelMenuKey]"
+      :items="firstLevelMenuItems"
+      @click="handleSelectFirstLevelMenuClick"
     />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
@@ -153,14 +163,16 @@ watch(
             />
           </header>
           <SimpleScrollbar>
-            <NMenu
-              v-model:expanded-keys="expandedKeys"
-              mode="vertical"
-              :value="selectedKey"
-              :options="childLevelMenus"
-              :inverted="inverted"
-              :indent="18"
-              @update:value="routerPushByKeyWithMetaQuery"
+            <AMenu
+              v-model:open-keys="expandedKeys"
+              mode="inline"
+              :selected-keys="[selectedKey]"
+              :items="childLevelMenuItems"
+              :theme="inverted ? 'dark' : 'light'"
+              :inline-indent="18"
+              style="width: 100%"
+              class="border-r-0"
+              @click="handleMenuClick"
             />
           </SimpleScrollbar>
         </DarkModeContainer>

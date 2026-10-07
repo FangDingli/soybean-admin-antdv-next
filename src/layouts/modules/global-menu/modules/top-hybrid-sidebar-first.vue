@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { RouteKey } from '@elegant-router/types';
 import { GLOBAL_HEADER_MENU_ID, GLOBAL_SIDER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';
@@ -6,6 +7,7 @@ import { useThemeStore } from '@/store/modules/theme';
 import { useRouterPush } from '@/hooks/common/router';
 import FirstLevelMenu from '../components/first-level-menu.vue';
 import { useMenu, useMixMenuContext } from '../context';
+import { getAntdMenuItems } from '../shared';
 
 defineOptions({
   name: 'TopHybridSidebarFirst'
@@ -23,6 +25,8 @@ const {
 } = useMixMenuContext('TopHybridSidebarFirst');
 const { selectedKey } = useMenu();
 
+const menuItems = computed(() => getAntdMenuItems(secondLevelMenus.value));
+
 /**
  * Handle first level menu select
  * @param key RouteKey
@@ -33,18 +37,15 @@ function handleSelectMenu(key: RouteKey) {
   // if there are second level menus, select the deepest one by default
   activeDeepestLevelMenuKey();
 }
+
+function handleMenuClick(info: { key: string | number }) {
+  routerPushByKeyWithMetaQuery(info.key as RouteKey);
+}
 </script>
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
-      mode="horizontal"
-      :value="selectedKey"
-      :options="secondLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="routerPushByKeyWithMetaQuery"
-    />
+    <AMenu mode="horizontal" :selected-keys="[selectedKey]" :items="menuItems" @click="handleMenuClick" />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <div class="h-full pt-2">
