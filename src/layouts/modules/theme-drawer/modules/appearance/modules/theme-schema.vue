@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, h } from 'vue';
 import { themeSchemaRecord } from '@/constants/app';
-import { useThemeStore } from '@/store/modules/theme';
 import { $t } from '@/locales';
+import { useThemeStore } from '@/store/modules/theme';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import SettingItem from '../../../components/setting-item.vue';
 

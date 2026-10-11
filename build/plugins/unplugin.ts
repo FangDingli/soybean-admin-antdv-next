@@ -1,12 +1,12 @@
-import process from 'node:process';
 import path from 'node:path';
+import process from 'node:process';
 import type { PluginOption } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
-import Icons from 'unplugin-icons/vite';
-import IconsResolver from 'unplugin-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
-import { AntdvNextResolver } from '@antdv-next/auto-import-resolver';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
+import { AntdvNextResolver } from '@antdv-next/auto-import-resolver';
 
 export function setupUnplugin(viteEnv: Env.ImportMeta) {
   const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv;

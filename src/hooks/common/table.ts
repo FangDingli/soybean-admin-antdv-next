@@ -1,12 +1,12 @@
 import { computed, effectScope, onScopeDispose, reactive, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
-import type { TablePaginationConfig } from 'antdv-next';
+import type { FlatResponseData } from '@sa/axios';
 import { useBoolean, useTable } from '@sa/hooks';
 import type { PaginationData, TableColumnCheck, UseTableOptions } from '@sa/hooks';
-import type { FlatResponseData } from '@sa/axios';
 import { jsonClone } from '@sa/utils';
-import { useAppStore } from '@/store/modules/app';
+import type { TablePaginationConfig } from 'antdv-next';
 import { $t } from '@/locales';
+import { useAppStore } from '@/store/modules/app';
 
 export type UseAntdvTableOptions<ResponseData, ApiData, Pagination extends boolean> = Omit<
   UseTableOptions<ResponseData, ApiData, App.Table.TableColumn<ApiData>, Pagination>,

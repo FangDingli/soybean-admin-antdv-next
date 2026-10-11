@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { TooltipPlacement } from 'antdv-next';
 import { twMerge } from 'tailwind-merge';
+import type { TooltipPlacement } from 'antdv-next';
 
 defineOptions({
   name: 'ButtonIcon',

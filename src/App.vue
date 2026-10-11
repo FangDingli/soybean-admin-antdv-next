@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { WatermarkProps } from 'antdv-next';
+import { antdvLocales } from './locales/antdv';
 import { useAppStore } from './store/modules/app';
 import { useThemeStore } from './store/modules/theme';
-import { antdvLocales } from './locales/antdv';
 
 defineOptions({
   name: 'App'
