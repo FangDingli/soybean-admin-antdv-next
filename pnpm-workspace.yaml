@@ -1,5 +1,9 @@
 packages:
   - 'packages/*'
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.1.0
+overrides:
+  vite: 'catalog:'
 allowBuilds:
   '@parcel/watcher': false
   esbuild: false

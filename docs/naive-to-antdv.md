@@ -210,3 +210,25 @@
   加 `block` 属性使项均分至容器宽（配合既有 w-214px）。
 - **验证**：三处均已浏览器截图复验；并顺带实测了暗黑模式切换全链路（Segmented @change →
   themeStore.darkMode → adapter 的 darkAlgorithm → 全局暗色），antdv 类名前缀确认为 `.ant-`。
+
+## 跟进上游 v2.3.0（2026-10-07）
+
+上游 2.2→2.3 的 117 个文件变更**全部是工程层动作，零运行时逻辑变更**（import 排序 + 工具链迁移 + 依赖升级），
+因此本次同步没有代码冲突，只做了三件事：
+
+1. **依赖对齐上游 2.3.0**：vue 3.5.43、vue-router 5.4.0、**pinia 4.0.3（major，实测 setup store API 兼容）**、
+   @vueuse 15.0.0（major，实测无感）、echarts 6.1.0、@iconify/vue 5.0.3、dayjs/tailwind-merge/patch；
+   devDeps：@vitejs/plugin-vue ^6.0.9、plugin-vue-jsx ^5.1.6、unplugin-icons 24、unplugin-vue-components 32.1.0。
+2. **构建工具链迁移 Vite+**（对齐上游 `13f7a199`，但只采最小集）：
+   - 摘掉独立 `vite` 依赖，新增 `vite-plus ^1.1.0`（提供 `vp` CLI）；
+   - `pnpm-workspace.yaml` 用 catalog + overrides 把 `vite` 别名到 `npm:@voidzero-dev/vite-plus-core@1.1.0`；
+   - `vite.config.ts` 的 `defineConfig` 改从 `vite-plus` 导入；scripts 换 `vp dev/build/preview`。
+   - **未采纳**：vp 的 lint/fmt/staged 配置（保留 oxlint/eslint/oxfmt 现状）、
+     `typescript-native-bridge`（typescript 保持 6.0.3 独立包，避免影响 vue-tsc 链路）、
+     `.vite-hooks`（保留 simple-git-hooks）、vp 自带包管理器（继续 pnpm）。
+3. **⚠️ pnpm 大坑**：`overrides` 里**直接写 `vite: npm:@voidzero-dev/vite-plus-core@^1.1.0` 会静默失效**
+   （装出来的还是真 vite 7.3.7，类型与 vite-plus 的 defineConfig 不匹配），必须像上游一样
+   先在 `catalog:` 声明再 `overrides: vite: 'catalog:'` 间接引用。
+
+验证：`pnpm typecheck` 0 error；`pnpm dev` 启动 + 浏览器全链路（登录态保持下的首页：菜单/标签栏/图表正常）；
+`pnpm build` 生产构建成功。
